@@ -267,7 +267,7 @@ CREATE TABLE addressbook
  PRIMARY KEY (regist_no));
 ```
 
-![](.\images\1660658319448.jpg)
+<img src=".\images\1660658319448.jpg" style="zoom:50%;" />
 
 **1.2假设在创建练习1.1中的 Addressbook 表时忘记添加如下一列 postal_code （邮政编码）了，请编写 SQL 把此列添加到 Addressbook 表中。**
 
@@ -281,7 +281,7 @@ CREATE TABLE addressbook
  ALTER TABLE addressbook ADD COLUMN postal_code CHAR(8) NOT NULL;
 ```
 
-![](.\images\1660658618912.jpg)
+<img src=".\images\1660658618912.jpg" style="zoom:50%;" />
 
 **1.3 填空题**
 
