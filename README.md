@@ -2,7 +2,7 @@
 
 本项目是**Datawhale**开源组织所举办的组队学习任务“SQL编程语言”的打卡记录，包括课程笔记，课后作业语总结等等。
 
-![](.\images\datawhale_code.jpeg)
+<img src=".\images\datawhale_code.jpeg" style="zoom:67%;" />
 
 + [Task01：环境搭建，初识数据库](./Task01.环境搭建,初识数据库.md)
 + Task02：基础查询与排序
