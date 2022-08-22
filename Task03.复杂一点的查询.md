@@ -220,7 +220,43 @@ FROM product
 WHERE purchase_price IN (320, 500, 5000);
 ```
 
-#### 使用子查询作为IN谓词的参数
+**子查询的结果可以作为IN谓词的参数**
+
+```mysql
+SELECT product_name, sale_price
+FROM product
+WHERE product_id IN (SELECT product_id
+  FROM shopproduct
+                       WHERE shop_id = '000C');
+```
+
+#### EXIST 谓词
+
+EXIT的作用就是 **“判断是否存在满足某种条件的记录”**。如果存在这样的记录就返回真（TRUE），如果不存在就返回假（FALSE）。EXIST（存在）谓词的主语是“记录”。
+
+```mysql
+SELECT product_name, sale_price
+  FROM product AS p
+ WHERE EXISTS (SELECT *
+                 FROM shopproduct AS sp
+                WHERE sp.shop_id = '000C'
+                  AND sp.product_id = p.product_id);
+```
+
+### 3.5 CASE表达式
+
+CASE 表达式是在区分情况时使用的，这种情况的区分在编程中通常称为（条件）分支。
+
+```mysql
+CASE WHEN <求值表达式> THEN <表达式>
+     WHEN <求值表达式> THEN <表达式>
+     WHEN <求值表达式> THEN <表达式>
+     .
+     .
+     .
+ELSE <表达式>
+END
+```
 
 
 
@@ -304,3 +340,57 @@ FROM product p
 ```
 
 <img src="https://files.catbox.moe/n0bl39.png" style="zoom:80%;" />
+
+### 05.
+
+运算中含有 NULL 时，运算结果是否必然会变为NULL ？
+
+> 不是
+>
+> null在参与算术运算(+ - * \)的时候，结果为null。
+>
+> null在参与比较运算（>,<,=,>=,<=,<> ）的时候，结果为false。
+
+### 06.
+
+对本章中使用的 `product`（商品）表执行如下 2 条 `SELECT` 语句，能够得到什么样的结果呢？
+
+```mysql
+SELECT product_name, purchase_price
+  FROM product
+ WHERE purchase_price NOT IN (500, 2800, 5000);
+```
+
+<img src="https://files.catbox.moe/czcfwj.png" style="zoom:67%;" />
+
+```mysql
+SELECT product_name, purchase_price
+  FROM product
+ WHERE purchase_price NOT IN (500, 2800, 5000, NULL);
+```
+
+> 在使用IN 和 NOT IN 时是无法选取出NULL数据的。 NULL 只能使用 IS NULL 和 IS NOT NULL 来进行判断。
+
+### 07.
+
+按照销售单价( `sale_price` )对练习 3.6 中的 `product`（商品）表中的商品进行如下分类。
+
+- 低档商品：销售单价在1000日元以下（T恤衫、办公用品、叉子、擦菜板、 圆珠笔）
+- 中档商品：销售单价在1001日元以上3000日元以下（菜刀）
+- 高档商品：销售单价在3001日元以上（运动T恤、高压锅）
+
+请编写出统计上述商品种类中所包含的商品数量的 SELECT 语句，结果如下所示。
+
+执行结果
+
+![](https://files.catbox.moe/2nof32.png)
+
+```mysql
+SELECT 
+	COUNT(CASE WHEN sale_price <= 1000 THEN product_id ELSE NULL END) AS low_price,
+	COUNT(CASE WHEN sale_price BETWEEN 1001 AND 3000 THEN product_id ELSE NULL END) AS mid_price,
+	COUNT(CASE WHEN sale_price > 3000 THEN product_id ELSE NULL END) AS high_price
+FROM product
+```
+
+![](https://files.catbox.moe/bhh5zq.png)
