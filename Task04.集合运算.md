@@ -188,8 +188,46 @@ WHERE product_id NOT IN (
 
 分别使用内连结和关联子查询每一类商品中售价最高的商品。
 
+```mysql
+SELECT
+	p1.product_type,
+	p2.max_price
+FROM product p1
+JOIN (
+	SELECT 
+		product_type,
+		max(sale_price) max_price
+	FROM product
+	GROUP BY 1
+) p2 
+	ON p1.product_type = p2.product_type AND 
+		 p1.sale_price = p2.max_price
+```
 
+```
+
+```
+
+![](https://files.catbox.moe/ckzq5x.png)
 
 ### 4.5
 
 用关联子查询实现：在 product 表中，取出 product_id, product_name, sale_price, 并按照商品的售价从低到高进行排序、对售价进行累计求和。
+
+```mysql
+SELECT 
+	p.product_id,
+	p.product_name,
+	p.product_type,
+	p.sale_price,
+	(
+		SELECT SUM(sale_price) FROM product p1
+		WHERE 
+			p.sale_price > p1.sale_price OR 
+			p.sale_price = p1.sale_price AND p.product_id <= p1.product_id
+	) sum
+FROM product AS p
+ORDER BY sale_price,sum;
+```
+
+![](https://files.catbox.moe/nyxqxi.png)
